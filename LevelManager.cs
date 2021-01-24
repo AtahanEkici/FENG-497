@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
@@ -13,7 +12,7 @@ public class LevelManager : MonoBehaviour
 	[Header("Side Walls")]
 	public GameObject wallsPrefab;
 	public float currentWallY;
-	public float wallTall = 11.5f;
+	public float wallTall = 10f;
 	public float distanceBeforeSpawn = 10f;
 	public int initialWalls = 3;
 	public List<GameObject> wallPool;
@@ -76,13 +75,13 @@ public class LevelManager : MonoBehaviour
 			pos2 = new Vector2(Random.Range(-5, 5), currentBlockY);
 			range = Random.Range(0, 100);
 
-			if (range <= 50) // % 50 normal  donat//
+			if (range <= 55)
 			{
 				GameObject go = Instantiate(blockPrefab, pos2, Quaternion.identity, transform);
 				blocksPool.Add(go);
 				currentBlockY += distanceBetweenBlocks;
 			}
-			else if (range > 50 && range < 90) // % 40 pink donat //
+			else if (range > 55 && range < 95)
 			{
 				GameObject go = Instantiate(blockPrefab_pink, pos2, Quaternion.identity, transform);
 				blocksPool.Add(go);
@@ -112,13 +111,13 @@ public class LevelManager : MonoBehaviour
 		pos2 = new Vector2(Random.Range(-5, 5), currentBlockY);
 		range = Random.Range(0, 100);
 
-		if (range <= 50) // % 50 normal  donat//
+		if (range <= 55)
 		{
 			GameObject go = Instantiate(blockPrefab, pos2, Quaternion.identity, transform);
 			blocksPool.Add(go);
 			currentBlockY += distanceBetweenBlocks;
 		}
-		else if (range > 50 && range < 90) // % 40 pink donat //
+		else if (range > 55 && range < 95)
 		{
 			GameObject go = Instantiate(blockPrefab_pink, pos2, Quaternion.identity, transform);
 			blocksPool.Add(go);

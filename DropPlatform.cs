@@ -1,17 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DropPlatform : MonoBehaviour
 {
 	Rigidbody2D rb2d;
 
-	void Start()
+	private void Awake()
 	{
 		rb2d = GetComponent<Rigidbody2D>();
 	}
 
-	void Droplatform()
+	private void Droplatform()
 	{
 		rb2d.isKinematic = false;
 	}

@@ -9,7 +9,7 @@ public class CameraMovement : MonoBehaviour {
 	public Text textSpeed;
 
 	private float speed;
-	public float speedMultiple = .5f;
+	public float speedMultiple = 1f;
 
 	private Vector3 targetPosition;
 	public Transform target;
@@ -19,9 +19,8 @@ public class CameraMovement : MonoBehaviour {
 	public float startLimmit = 5f;
 	public float maxDistanceBeforeLose = 5f;
 
-	// Camera movement //
-
 	private float timer;
+	private bool isDone = false;
 
 	private float getPlayerSpeed()
     {
@@ -40,9 +39,11 @@ public class CameraMovement : MonoBehaviour {
 		if (target.position.y < startLimmit)
 			return;
 		
-		if (distance < -maxDistanceBeforeLose)
+		if (distance < -maxDistanceBeforeLose && isDone == false)
 		{
+			isDone = true;
 			gameManager.GameOver();
+			speed = 0f;
 		}
 		else if (distance > 1)
 		{
@@ -58,6 +59,9 @@ public class CameraMovement : MonoBehaviour {
 		timer += Time.deltaTime;
 		textSpeed.text = "x " + (int)(1 + (Time.time) / 60);
 
-		speed = (1 + (timer) / 60) * speedMultiple;
+		if(isDone == false)
+        {
+			speed = (1 + (timer) / 60) * speedMultiple;
+		}
 	}
 }

@@ -1,19 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+	private Slider slide;
 	public ScoreManager scoreManager;
 	public GameObject Player;
-	private  Slider slide;
 
-	public float moveForce = 365f;
-	public float maxSpeed = 5f;
+	public float speed = 0.28f;
 	public float jumpForce = 1000f;
-	public float bounceFactor = 1.25f;
-	public float forceJumpLimit = 1700f;
 	public float HorizontalJumpFactor = 100f;
 
 	private Rigidbody2D rb2D;
@@ -23,48 +18,54 @@ public class PlayerController : MonoBehaviour
 	public ParticleSystem moveParticle;
 
 	private float velocity;
-	private float h;
+	private float mp;
+	private float screen_width;
 
-	private void Start()
+	private const int slider_value = 10;
+
+	private void Awake()
 	{
-		forceJumpEffect.Stop(); // Initially stop The Animation //
-		moveParticle.Stop();
-		anim = this.transform.GetChild(1).GetComponent<Animation>();
-		anim.wrapMode = WrapMode.Once;
-		rb2D = GetComponent<Rigidbody2D>();
 		InitializeSlider();
+		rb2D = GetComponent<Rigidbody2D>();
+		anim = transform.GetChild(1).GetComponent<Animation>();
+		screen_width = Screen.width;
+		anim.wrapMode = WrapMode.Once;
 	}
-	private void InitializeSlider()
-    {
-		slide = GameObject.FindGameObjectWithTag("Slider").GetComponent<Slider>();
-		slide.minValue = 0;
-		slide.maxValue = 100;
-		slide.wholeNumbers = true;
-		slide.value = 5;
-	}
-
-	private void Update()
+    private void Update()
     {
 		velocity = rb2D.velocity.y;
+		mp = Input.mousePosition.x;
 	}
-
-	private void Move()
-    {
-		h = Input.GetAxis("Horizontal");
-
-		if (Mathf.Abs(h * rb2D.velocity.x) < maxSpeed)
+    private void FixedUpdate()
+	{
+		Move_With_Touch();
+		JumpControl();
+	}
+	private void InitializeSlider()
+	{
+		slide = GameObject.FindGameObjectWithTag("Slider").GetComponent<Slider>();
+		slide.value = 0;
+		slide.maxValue = 100;
+		slide.minValue = 0;
+		slide.wholeNumbers = true;
+	}
+	private void Move_With_Touch()
+	{
+		if (Input.GetMouseButton(0)) // If the screen is touched //
 		{
-			rb2D.AddForce(h * moveForce * Vector2.right);
-		}
-
-		if (Mathf.Abs(h) <= 0.05)
-		{
-			rb2D.velocity = new Vector2(0, rb2D.velocity.y);
+			if (mp < (screen_width / 2)) // Move Left //
+			{
+				Player.transform.Translate(-speed,0,0);
+			}
+			else // Move Right //
+			{
+				Player.transform.Translate(speed, 0, 0);
+			}
 		}
 	}
 
 	private void JumpControl()
-    {
+	{
 		if (velocity == 0)
 		{
 			Jump();
@@ -77,27 +78,22 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	private void FixedUpdate()
+	private void Jump()
 	{
-		Move();
-		JumpControl();
-	}
-
-	void Jump()
-	{
-		if(slide.value == 100)
-        {
-			rb2D.AddForce(Vector2.up * ((jumpForce * 3) + Mathf.Abs(rb2D.velocity.y) * HorizontalJumpFactor));
-			slide.value = 0;
-			moveParticle.Stop();
-			forceJumpEffect.Play();
-		}
-		else
-        {
+		if(slide.value < 100)
+		{
 			rb2D.AddForce(Vector2.up * (jumpForce + Mathf.Abs(rb2D.velocity.y) * HorizontalJumpFactor));
-			SliderUpdate(10);
+			SliderUpdate();
 			forceJumpEffect.Stop();
 			moveParticle.Play();
+		}
+
+		else if(slide.value >= 100)
+        {
+			rb2D.AddForce(Vector2.up * ((jumpForce * 3) + Mathf.Abs(rb2D.velocity.y) * HorizontalJumpFactor));
+			SliderDefault();
+			moveParticle.Stop();
+			forceJumpEffect.Play();
 		}
 	}
 
@@ -109,8 +105,16 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	private void SliderUpdate(int value)
+	private void SliderDefault()
     {
-		slide.value += value;
+		slide.value = 0;
+    }
+
+	private void SliderUpdate()
+    {
+		if(slide.value < 100)
+        {
+			slide.value += slider_value;
+		}
     }
 }

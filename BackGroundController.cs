@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class BackGroundController : MonoBehaviour
@@ -16,14 +14,14 @@ public class BackGroundController : MonoBehaviour
     public Texture image6;
     public Texture image7;
 
-    void Start()
+    private void Awake()
     {
-        Change_Image_Background(); // Initially Change Image of the Backgorund //
+        Change_Image_Background();
     }
 
     public void Change_Image_Background()
     {
-        rimg = this.GetComponent<RawImage>();
+        rimg = GetComponent<RawImage>();
 
         int number = Random.Range(1,7);
 
