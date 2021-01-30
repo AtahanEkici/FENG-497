@@ -9,9 +9,8 @@ public class AnimatorSpeed : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
-
     private void Start()
     {
-        animator.speed = Random.Range(0.5f, 1.8f);
+        animator.speed = Random.Range(0.5f, 2f);
     }
 }

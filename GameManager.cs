@@ -10,15 +10,28 @@ public class GameManager : MonoBehaviour
 	public GameObject Texture_Changer;
     public GameObject Player;
 
+	private Text Game_Text;
+	private Text Menu_Text;
+
+	private TextureController tc1;
+	private PlayerController pc1;
+
+    private void Awake()
+    {
+		Game_Text = gameScore.GetComponent<Text>();
+		Menu_Text = menuScore.GetComponent<Text>();
+		tc1 = Texture_Changer.GetComponent<TextureController>();
+		pc1 = Player.GetComponent<PlayerController>();
+	}
     public void GameOver()
 	{
-		PauseGame();
+		//PauseGame();
+		Game_Text.text = Menu_Text.text;
 		panelGameOverAnim.SetTrigger("Open");
 		scoremanager.SetActive(false);
 		menuScore.SetActive(false);
-		Texture_Changer.GetComponent<TextureController>().enabled = false;
-		gameScore.GetComponent<Text>().text = menuScore.GetComponent<Text>().text;
-		Player.GetComponent<PlayerController>().enabled = false;
+		tc1.enabled = false;
+		pc1.enabled = false;	
 	}
 	private void PauseGame()
 	{
@@ -35,6 +48,6 @@ public class GameManager : MonoBehaviour
 	public void PlayAgain()
 	{
 		UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-		ResumeGame();
+		//ResumeGame();
 	}
 }

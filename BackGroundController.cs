@@ -4,7 +4,6 @@ using UnityEngine.UI;
 public class BackGroundController : MonoBehaviour
 {
     private RawImage rimg;
-
     public ScoreManager scoreManager;
     public Texture image1;
     public Texture image2;
@@ -13,12 +12,10 @@ public class BackGroundController : MonoBehaviour
     public Texture image5;
     public Texture image6;
     public Texture image7;
-
     private void Awake()
     {
         Change_Image_Background();
     }
-
     public void Change_Image_Background()
     {
         rimg = GetComponent<RawImage>();

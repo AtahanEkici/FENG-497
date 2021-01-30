@@ -10,10 +10,6 @@ public class ScoreManager : MonoBehaviour
 		textScore.text = "Score: 0";
 		current_score = 0;
 	}
-	public int getScore()
-    {
-		return current_score;
-    }
 	public void UpdateScore (int score) 
 	{
 		current_score = (score / 3) * 10;
