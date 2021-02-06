@@ -11,13 +11,13 @@ public class DropPlatform : MonoBehaviour
 	}
 	private void Droplatform()
 	{
-		rb2d.isKinematic = false;
+		rb2d.bodyType = RigidbodyType2D.Dynamic;
 	}
 	void OnCollisionEnter2D(Collision2D col)
 	{
 		if (col.gameObject.CompareTag("Player") && Player.velocity.y == 0)
 		{
-			Invoke(nameof(Droplatform), 0.30f);
+			Invoke(nameof(Droplatform), 0.25f);
 		}
 	}
 }

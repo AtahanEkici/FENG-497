@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class CameraMovement : MonoBehaviour 
+public class CameraMovement : MonoBehaviour
 {
 	public GameManager gameManager;
 	public Text textSpeed;
@@ -19,12 +19,12 @@ public class CameraMovement : MonoBehaviour
 	{
 		timer = 0;
 	}
-	private void LateUpdate() 
+	private void LateUpdate()
 	{
 		distance = target.position.y - transform.position.y;
 		if (target.position.y < startLimmit)
 			return;
-		
+
 		if (distance < -maxDistanceBeforeLose && isDone == false)
 		{
 			isDone = true;
@@ -34,7 +34,7 @@ public class CameraMovement : MonoBehaviour
 		else if (distance > 1)
 		{
 			targetPosition = new Vector3(0, target.position.y, transform.position.z);
-			transform.position = Vector3.Lerp(transform.position, targetPosition, distance*Time.deltaTime);
+			transform.position = Vector3.Lerp(transform.position, targetPosition, distance * Time.deltaTime);
 		}
 		else
 		{
@@ -43,8 +43,8 @@ public class CameraMovement : MonoBehaviour
 		}
 		timer += Time.deltaTime;
 		textSpeed.text = "x " + (int)(1 + (Time.time) / 60);
-		if(isDone == false)
-        {
+		if (isDone == false)
+		{
 			speed = (1 + (timer) / 60) * speedMultiple;
 		}
 	}

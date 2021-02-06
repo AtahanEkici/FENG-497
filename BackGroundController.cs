@@ -19,9 +19,7 @@ public class BackGroundController : MonoBehaviour
     public void Change_Image_Background()
     {
         rimg = GetComponent<RawImage>();
-
         int number = Random.Range(1,7);
-
         if (number == 1 && rimg != image1)
         {
             rimg.texture = image1;

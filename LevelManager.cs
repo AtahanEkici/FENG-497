@@ -56,7 +56,7 @@ public class LevelManager : MonoBehaviour
 		}
 	}
 	private void InitFirst()
-    {
+	{
 		pos2 = new Vector2(Random.Range(-5, 5), currentBlockY);
 		range = Random.Range(0, 100);
 		go = Instantiate(blockPrefab, pos2, Quaternion.identity, transform);
@@ -112,7 +112,7 @@ public class LevelManager : MonoBehaviour
 			blocksPool.Add(go);
 			currentBlockY += distanceBetweenBlocks;
 		}
-		else if (range > 55 && range < 95)
+		else if (range > 55 && range < 90)
 		{
 			go = Instantiate(blockPrefab_pink, pos2, Quaternion.identity, transform);
 			blocksPool.Add(go);
