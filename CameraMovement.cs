@@ -1,24 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-
 public class CameraMovement : MonoBehaviour
 {
 	public GameManager gameManager;
 	public Text textSpeed;
+	public Transform target;
 	public float speedMultiple = 1f;
 	public float startLimmit = 5f;
 	public float maxDistanceBeforeLose = 5f;
-	public Transform target;
-
+	
 	private Vector3 targetPosition;
 	private float distance;
 	private float speed;
-	private float timer;
+	private float timer = 0;
 	private bool isDone = false;
-	private void Start()
-	{
-		timer = 0;
-	}
+
 	private void LateUpdate()
 	{
 		distance = target.position.y - transform.position.y;
@@ -27,9 +23,9 @@ public class CameraMovement : MonoBehaviour
 
 		if (distance < -maxDistanceBeforeLose && isDone == false)
 		{
+			speed = 0f;
 			isDone = true;
 			gameManager.GameOver();
-			speed = 0f;
 		}
 		else if (distance > 1)
 		{
@@ -41,8 +37,11 @@ public class CameraMovement : MonoBehaviour
 			targetPosition = new Vector3(0, transform.position.y + speed, transform.position.z);
 			transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime);
 		}
+
 		timer += Time.deltaTime;
+
 		textSpeed.text = "x " + (int)(1 + (Time.time) / 60);
+
 		if (isDone == false)
 		{
 			speed = (1 + (timer) / 60) * speedMultiple;

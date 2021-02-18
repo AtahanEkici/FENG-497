@@ -5,13 +5,8 @@ public class ScoreManager : MonoBehaviour
 {
 	public Text textScore;
 	public int current_score;
-	public GameManager game_manager;
 	public int max_score = 0;
 
-    private void Awake()
-    {
-		game_manager = GetComponent<GameManager>();
-	}
     private void Start() 
 	{
 		textScore.text = "Score: 0";

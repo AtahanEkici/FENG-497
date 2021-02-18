@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -15,6 +18,7 @@ public class GameManager : MonoBehaviour
 	private TextureController tc1;
 	private PlayerController pc1;
 	private ScoreManager ScoreTracker;
+	private AsyncOperation asyncLoadLevel;
 
 	private void Awake()
 	{
@@ -23,6 +27,20 @@ public class GameManager : MonoBehaviour
 		tc1 = Texture_Changer.GetComponent<TextureController>();
 		pc1 = Player.GetComponent<PlayerController>();
 		ScoreTracker = scoremanager.GetComponent<ScoreManager>();
+	}
+
+    private void Start()
+    {
+		QualitySettings.vSyncCount = 1;
+	}
+    IEnumerator Restart()
+	{
+		asyncLoadLevel = SceneManager.LoadSceneAsync("0", LoadSceneMode.Single);
+
+		while (!asyncLoadLevel.isDone)
+		{
+			yield return null;
+		}
 	}
 	public void GameOver()
 	{
@@ -35,18 +53,12 @@ public class GameManager : MonoBehaviour
 	}
     private void Update()
     {
+		ResumeORPause();
+
 		if (ScoreTracker.max_score >= 60 && ScoreTracker.current_score <= 0)
 		{
 			GameOver();
 		}
-	}
-    private void PauseGame()
-	{
-		Time.timeScale = 0;
-	}
-	private void ResumeGame()
-	{
-		Time.timeScale = 1;
 	}
 	public void Quit_game()
 	{
@@ -54,6 +66,27 @@ public class GameManager : MonoBehaviour
 	}
 	public void PlayAgain()
 	{
-		UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        StartCoroutine(Restart());
+    }
+	private void Quit_yes_Or_No()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			Quit_game();
+		}
+	}
+	private void ResumeORPause()
+	{
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			if (Time.timeScale == 1)
+			{
+				Time.timeScale = 0;
+			}
+			else
+			{
+				Time.timeScale = 1;
+			}
+		}
 	}
 }

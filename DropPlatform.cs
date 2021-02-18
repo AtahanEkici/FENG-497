@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-
 public class DropPlatform : MonoBehaviour
 {
 	private Rigidbody2D rb2d;

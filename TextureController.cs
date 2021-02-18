@@ -3,19 +3,21 @@ public class TextureController : MonoBehaviour
 {
     public Material texture1;
     public Material texture2;
+    public GameObject Player;
 
-    private Rigidbody2D Player;
+    private Rigidbody2D r2d2;
     private bool state = true;
     private float velocity;
-    private MeshRenderer mr1;
+    private MeshRenderer[] mr;
+
     private void Awake()
     {
-        Player = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>();
-        mr1 = GetComponent<MeshRenderer>();
+        r2d2 = Player.GetComponent<Rigidbody2D>();
+        mr = Player.GetComponentsInChildren<MeshRenderer>();
     }
     private void Update()
     {
-        velocity = Player.velocity.y;
+        velocity = r2d2.velocity.y;
     }
     void FixedUpdate()
     {
@@ -28,12 +30,12 @@ public class TextureController : MonoBehaviour
     {
         if (state == true)
         {
-            mr1.material = texture2;
+            mr[0].material = texture2;
             state = false;
         }
         else
         {
-            mr1.material = texture1;
+            mr[0].material = texture1;
             state = true;
         }
     }

@@ -1,77 +1,71 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
-
 public class PlayerController : MonoBehaviour
 {
 	public ScoreManager scoreManager;
 	public GameObject Player;
-	public float speed = 0.25f;
-	public float jumpForce = 1000f;
-	public float HorizontalJumpFactor = 100f;
 	public ParticleSystem forceJumpEffect;
 	public ParticleSystem moveParticle;
 
+	private readonly Vector3 jump = new Vector3(0.0f, 2.0f, 0.0f);
 	private Slider slide;
 	private Rigidbody2D rb2D;
 	private Animation anim;
 	private float velocity;
 	private float mp;
 	private float screen_width;
-	private const int slider_value = 10;
+	private readonly int slider_value = 10;
+	private readonly float jump_Force = 10f;
+	private readonly float power_jump_Force = 30f;
+	private readonly float speed = 13f;
+
 	private void Awake()
 	{
-		rb2D = GetComponent<Rigidbody2D>();
 		slide = GameObject.FindGameObjectWithTag("Slider").GetComponent<Slider>();
 		anim = transform.GetChild(1).GetComponent<Animation>();
+		rb2D = GetComponent<Rigidbody2D>();
 	}
 	private void Start()
 	{
-		InitializeSlider();
 		anim.wrapMode = WrapMode.Once;
-		screen_width = Screen.width;
+		InitializeSlider();
 	}
 	private void Update()
 	{
 		velocity = rb2D.velocity.y;
+		screen_width = Screen.width;
 		mp = Input.mousePosition.x;
+		Movement_Control();
 	}
 	private void FixedUpdate()
 	{
 		JumpControl();
-		Move_With_Mouse();
 	}
 	private void InitializeSlider()
 	{
+		slide.value = 0;
 		slide.wholeNumbers = true;
 		slide.minValue = 0;
 		slide.maxValue = 100;
-		slide.value = 0;
 	}
-	private void ResumeORPause()
-	{
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			if (Time.timeScale == 1)
-			{
-				Time.timeScale = 0;
-			}
-			else
-			{
-				Time.timeScale = 1;
-			}
-		}
+	private void Movement_Control()
+    {
+		Move_With_Mouse();
+		Move_With_Keyboard();
 	}
+	
 	private void Move_With_Mouse()
 	{
 		if (Input.GetMouseButton(0))
 		{
 			if (mp < (screen_width / 2))
 			{
-				Player.transform.Translate(-speed, 0, 0);
+				Player.transform.Translate(-speed * Time.deltaTime, 0, 0);
 			}
 			else if (mp > (screen_width / 2))
 			{
-				Player.transform.Translate(speed, 0, 0);
+				Player.transform.Translate(speed * Time.deltaTime, 0, 0);
 			}
 		}
 	}
@@ -79,50 +73,74 @@ public class PlayerController : MonoBehaviour
 	{
 		if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
 		{
-			Player.transform.Translate(-speed, 0, 0);
+			Player.transform.Translate(-speed * Time.deltaTime, 0, 0);
 		}
 		else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
 		{
-			Player.transform.Translate(speed, 0, 0);
-		}
-	}
-	private void Escape()
-	{
-		if (Input.GetKeyDown(KeyCode.Escape))
-		{
-			Application.Quit();
+			Player.transform.Translate(speed * Time.deltaTime, 0, 0);
 		}
 	}
 	private void JumpControl()
 	{
 		if (velocity == 0)
 		{
-			anim.Play();
-			Jump();
+			Velocity_Is_Zero(); 
 		}
 		else if (velocity < 0)
 		{
-			forceJumpEffect.Stop();
-			moveParticle.Stop();
+			Velocity_Is_Minus();
 		}
 	}
 	private void Jump()
 	{
-		if (slide.value == 100)
+		if (slide.value < 100)
 		{
-			rb2D.AddForce(Vector2.up * ((jumpForce * 3) + Mathf.Abs(rb2D.velocity.y) * HorizontalJumpFactor));
-			SliderDefault();
-			moveParticle.Stop();
-			forceJumpEffect.Play();
+			Normal_Jump();
+			After_Normal_Jump();
 		}
-		else
+		else if(slide.value == 100)
 		{
-			rb2D.AddForce(Vector2.up * (jumpForce + Mathf.Abs(rb2D.velocity.y) * HorizontalJumpFactor));
-			SliderUpdate();
-			forceJumpEffect.Stop();
-			moveParticle.Play();
+			Power_Jump();
+			After_Power_Jump();
 		}
 	}
+
+	private void Velocity_Is_Minus() 
+    {
+		forceJumpEffect.Stop();
+		moveParticle.Stop();
+    }
+
+	private void Velocity_Is_Zero()
+	{
+		anim.Play();
+		Jump();
+	}
+
+	private void Normal_Jump()
+    {
+		rb2D.AddForce((jump * jump_Force), ForceMode2D.Impulse);
+	}
+
+    private void Power_Jump()
+    {
+		rb2D.AddForce((jump * power_jump_Force), ForceMode2D.Impulse);
+	}
+
+	private void After_Normal_Jump()
+    {
+		SliderUpdate();
+		forceJumpEffect.Stop();
+		moveParticle.Play();
+	}
+
+	private void After_Power_Jump()
+    {
+		SliderDefault();
+		moveParticle.Stop();
+		forceJumpEffect.Play();
+	}
+
 	private void OnCollisionEnter2D(Collision2D col)
 	{
 		if (col.gameObject.CompareTag("Platform"))

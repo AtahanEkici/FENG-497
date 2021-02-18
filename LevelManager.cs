@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-	private Vector2 pos;
-	private Vector2 pos2;
+	private Vector3 pos;
+	private Vector3 pos2;
 	private int range;
 	private GameObject go;
 	private GameObject temp;
@@ -49,7 +49,7 @@ public class LevelManager : MonoBehaviour
 	{
 		for (int i = 0; i < initialWalls; ++i)
 		{
-			pos = new Vector2(0, currentWallY);
+			pos = new Vector3(0, currentWallY);
 			go = Instantiate(wallsPrefab, pos, Quaternion.identity, transform);
 			wallPool.Add(go);
 			currentWallY += wallTall;
@@ -57,7 +57,7 @@ public class LevelManager : MonoBehaviour
 	}
 	private void InitFirst()
 	{
-		pos2 = new Vector2(Random.Range(-5, 5), currentBlockY);
+		pos2 = new Vector3(Random.Range(-5, 5), currentBlockY);
 		range = Random.Range(0, 100);
 		go = Instantiate(blockPrefab, pos2, Quaternion.identity, transform);
 		blocksPool.Add(go);
@@ -69,7 +69,7 @@ public class LevelManager : MonoBehaviour
 
 		for (int i = 0; i < initBlocksLine; i++)
 		{
-			pos2 = new Vector2(Random.Range(-5, 5), currentBlockY);
+			pos2 = new Vector3(Random.Range(-5, 5), currentBlockY);
 			range = Random.Range(0, 100);
 
 			if (range <= 50)
@@ -86,7 +86,7 @@ public class LevelManager : MonoBehaviour
 			}
 			else
 			{
-				pos2 = new Vector2(-5, currentBlockY);
+				pos2 = new Vector3(-5, currentBlockY);
 				go = Instantiate(blockPrefab_movable, pos2, Quaternion.identity, transform);
 				blocksPool.Add(go);
 				currentBlockY += distanceBetweenBlocks;
@@ -95,7 +95,7 @@ public class LevelManager : MonoBehaviour
 	}
 	private void SpawnSideWall()
 	{
-		wallPool[0].transform.position = new Vector2(0, currentWallY);
+		wallPool[0].transform.position = new Vector3(0, currentWallY);
 		currentWallY += wallTall;
 		temp = wallPool[0];
 		wallPool.RemoveAt(0);
@@ -103,7 +103,7 @@ public class LevelManager : MonoBehaviour
 	}
 	private void SpawnBlocks()
 	{
-		pos2 = new Vector2(Random.Range(-5, 5), currentBlockY);
+		pos2 = new Vector3(Random.Range(-5, 5), currentBlockY);
 		range = Random.Range(0, 100);
 
 		if (range <= 55)
@@ -120,7 +120,7 @@ public class LevelManager : MonoBehaviour
 		}
 		else
 		{
-			pos2 = new Vector2(-5, currentBlockY);
+			pos2 = new Vector3(-5, currentBlockY);
 			go = Instantiate(blockPrefab_movable, pos2, Quaternion.identity, transform);
 			blocksPool.Add(go);
 			currentBlockY += distanceBetweenBlocks;
