@@ -5,9 +5,9 @@ Web Site: http://feng497.eba-wyjhtybm.eu-central-1.elasticbeanstalk.com/document
 
 ## Chocolate Hopper ##
 
-https://github.com/AtahanEkici/FENG-497/blob/main/Chocolate_Hopper.PNG
+![Alt Text](https://github.com/AtahanEkici/FENG-497/blob/main/Chocolate_Hopper.PNG)
 
 
 ## Color Cubes ##
 
-https://github.com/AtahanEkici/FENG-497/blob/main/Color_Cubes.PNG
+![Alt Text](https://github.com/AtahanEkici/FENG-497/blob/main/Color_Cubes.PNG)
