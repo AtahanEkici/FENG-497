@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
 	private readonly float jump_Force = 10f;
 	private readonly float power_jump_Force = 30f;
 	private readonly float speed = 13f;
+	private float targetTime = 0.75f;
+	private bool isReady = true;
 
 	private void Awake()
 	{
@@ -30,13 +32,14 @@ public class PlayerController : MonoBehaviour
 	{
 		anim.wrapMode = WrapMode.Once;
 		InitializeSlider();
+		screen_width = Screen.width;
 	}
 	private void Update()
 	{
 		velocity = rb2D.velocity.y;
-		screen_width = Screen.width;
 		mp = Input.mousePosition.x;
 		Movement_Control();
+		TimerControl();
 	}
 	private void FixedUpdate()
 	{
@@ -52,12 +55,11 @@ public class PlayerController : MonoBehaviour
 	private void Movement_Control()
     {
 		Move_With_Mouse();
-		Move_With_Keyboard();
 	}
 	
 	private void Move_With_Mouse()
 	{
-		if (Input.GetMouseButton(0))
+		if (Input.GetMouseButton(0)) // Ekranı 2'ye ayırıp basılan tarafa göre karakteri hareket ettirme fonksiyonu //
 		{
 			if (mp < (screen_width / 2))
 			{
@@ -80,9 +82,20 @@ public class PlayerController : MonoBehaviour
 			Player.transform.Translate(speed * Time.deltaTime, 0, 0);
 		}
 	}
+
+	private void TimerControl()
+    {
+		targetTime -= Time.deltaTime;
+
+		if (targetTime <= 0.0f)
+		{
+			isReady = true;
+		}
+	}
+
 	private void JumpControl()
 	{
-		if (velocity == 0)
+		if (velocity == 0 && isReady == true)
 		{
 			Velocity_Is_Zero(); 
 		}
@@ -93,6 +106,8 @@ public class PlayerController : MonoBehaviour
 	}
 	private void Jump()
 	{
+		isReady = false;
+
 		if (slide.value < 100)
 		{
 			Normal_Jump();
@@ -102,7 +117,7 @@ public class PlayerController : MonoBehaviour
 		{
 			Power_Jump();
 			After_Power_Jump();
-		}
+		}	
 	}
 
 	private void Velocity_Is_Minus() 
